@@ -53,6 +53,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         canBeSecurityKey: Bool = true,
         residentKeyPreference: String?,
         attestationPreference: String?,
+        salt: String?,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -86,6 +87,15 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             if #available(iOS 17.4, *) {
                 let excluded = parseCredentials(credentials: excludeCredentials)
                 platformRequest.excludedCredentials = excluded
+            }
+
+            // PRF
+            if #available(iOS 18.0, *) {
+            guard let saltB64Url = salt, let saltB64Url = Data.fromBase64Url(saltB64Url) else {
+                return
+            }
+            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltB64Url)
+                platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFRegistrationInput.inputValues(values)
             }
             
             requests.append(platformRequest)
@@ -154,6 +164,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         conditionalUI: Bool,
         allowedCredentials: [CredentialType],
         preferImmediatelyAvailableCredentials: Bool,
+        salt: String?,
         completion: @escaping (Result<AuthenticateResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -171,6 +182,14 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
         let platformRequest = platformProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
+        
+        // PRF
+        if #available(iOS 18.0, *) {
+        guard let saltB64Url = salt, let saltB64Url = Data.fromBase64Url(saltB64Url) else { return }
+        let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltB64Url)
+            platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFAssertionInput.inputValues(values)
+        }
+        
         requests.append(platformRequest)
         
         // We should not show the security key flow when preferImmediatelyAvailable is set to true
