@@ -104,12 +104,16 @@ class User {
 /// Represents a register response
 class RegisterResponse {
   RegisterResponse({
+    this.prf,
     required this.id,
     required this.rawId,
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
   });
+
+  /// The PRF
+  String? prf;
 
   /// The ID
   String id;
@@ -128,6 +132,7 @@ class RegisterResponse {
 
   Object encode() {
     return <Object?>[
+      prf,
       id,
       rawId,
       clientDataJSON,
@@ -139,11 +144,12 @@ class RegisterResponse {
   static RegisterResponse decode(Object result) {
     result as List<Object?>;
     return RegisterResponse(
-      id: result[0]! as String,
-      rawId: result[1]! as String,
-      clientDataJSON: result[2]! as String,
-      attestationObject: result[3]! as String,
-      transports: (result[4] as List<Object?>?)!.cast<String?>(),
+      prf: result[0] as String?,
+      id: result[1]! as String,
+      rawId: result[2]! as String,
+      clientDataJSON: result[3]! as String,
+      attestationObject: result[4]! as String,
+      transports: (result[5] as List<Object?>?)!.cast<String?>(),
     );
   }
 }
@@ -307,12 +313,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference, String? arg_salt) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference, arg_salt]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

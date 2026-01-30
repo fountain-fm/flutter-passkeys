@@ -3,6 +3,7 @@ description: Flutter plugin enabling simple passkey authentication. Can be eithe
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys
 version: 2.17.4
+resolution: workspace
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

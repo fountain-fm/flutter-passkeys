@@ -58,7 +58,11 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.prf,
   });
+
+  /// The PRF
+  final String? prf;
 
   /// The ID
   final String id;
@@ -123,6 +127,7 @@ abstract class PasskeysApi {
     bool canBeSecurityKey,
     String? residentKeyPreference,
     String? attestationPreference,
+    String? salt,
   );
 
   @async
