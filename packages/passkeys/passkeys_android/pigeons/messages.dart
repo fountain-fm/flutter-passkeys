@@ -189,9 +189,9 @@ abstract class PasskeysApi {
     int? timeout,
     String? userVerification,
     List<AllowCredential>? allowCredentials,
-    bool? preferImmediatelyAvailableCredentials, {
+    bool? preferImmediatelyAvailableCredentials,
     String? salt,
-  });
+  );
 
   @async
   void cancelCurrentAuthenticatorOperation();

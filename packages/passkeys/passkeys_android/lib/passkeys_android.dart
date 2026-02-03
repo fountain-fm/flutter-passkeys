@@ -16,7 +16,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, {String? salt}) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     final r = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -30,7 +30,7 @@ class PasskeysAndroid extends PasskeysPlatform {
         );
       }).toList(),
       request.preferImmediatelyAvailableCredentials,
-      arg_salt: salt,
+      salt,
     );
 
     return AuthenticateResponseType(
@@ -54,7 +54,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,

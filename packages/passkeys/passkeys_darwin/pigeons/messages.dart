@@ -130,9 +130,9 @@ abstract class PasskeysApi {
     bool canBePlatformAuthenticator,
     bool canBeSecurityKey,
     String? residentKeyPreference,
-    String? attestationPreference,
+    String? attestationPreference, {
     String? salt,
-  );
+  });
 
   @async
   AuthenticateResponse authenticate(

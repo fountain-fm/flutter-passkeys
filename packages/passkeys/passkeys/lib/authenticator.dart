@@ -40,7 +40,7 @@ class PasskeyAuthenticator {
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
-  Future<RegisterResponseType> register(RegisterRequestType request, String salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, {String? salt}) async {
     if (debugMode) {
       await _doctor.check(request.relyingParty.id);
     }
@@ -108,7 +108,7 @@ class PasskeyAuthenticator {
         }
       }
 
-      final r = await _platform.authenticate(request, salt: salt);
+      final r = await _platform.authenticate(request, salt);
 
       return r;
     } on PlatformException catch (e) {

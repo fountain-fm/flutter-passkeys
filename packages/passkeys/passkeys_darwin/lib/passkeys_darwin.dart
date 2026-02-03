@@ -21,7 +21,7 @@ class PasskeysDarwin extends PasskeysPlatform {
   Future<bool> canAuthenticate() async => _api.canAuthenticate();
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(name: request.user.name, id: request.user.id);
     final relyingPartyArg = RelyingParty(
       name: request.relyingParty.name,
@@ -52,7 +52,7 @@ class PasskeysDarwin extends PasskeysPlatform {
   }
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, {String? salt}) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     var conditionalUI = false;
     if (request.mediation == MediationType.Conditional) {
       conditionalUI = true;

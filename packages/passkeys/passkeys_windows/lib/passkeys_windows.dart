@@ -16,7 +16,7 @@ class PasskeysWindows extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, {String? salt}) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     final authenticateResponse = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -55,7 +55,7 @@ class PasskeysWindows extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,

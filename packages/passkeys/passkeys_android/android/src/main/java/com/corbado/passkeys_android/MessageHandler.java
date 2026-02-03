@@ -130,10 +130,9 @@ public class MessageHandler implements Messages.PasskeysApi {
         try {
             JSONObject optionsJson = createCredentialOptions.toJSON();
 
-            // Add PRF extension if salt provided
+            // PRF extension if salt provided
             if (salt != null && !salt.isEmpty()) {
                 String saltBase64Url = hexToBase64Url(salt);
-                Log.i("Passkey", "salt provided" + saltBase64Url);
                 JSONObject extensions = optionsJson.optJSONObject("extensions");
                 if (extensions == null) extensions = new JSONObject();
 
@@ -164,7 +163,6 @@ public class MessageHandler implements Messages.PasskeysApi {
                             try {
                                 JSONObject json = new JSONObject(resp);
                                 JSONObject response = json.getJSONObject("response");
-                                Log.i("Passkeys", "json = " + json);
 
                                 // Note: The "transports" field can be optional in the authenticator response.
                                 // While the WebAuthn spec
@@ -184,8 +182,6 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                                 JSONObject ext = json.optJSONObject("clientExtensionResults");
                                 Map<String, Object> extMap = null;
-
-                                Log.i("Passkeys", "extension = " + ext);
 
                                 if (ext != null) {
                                     extMap = new HashMap<>();
@@ -286,7 +282,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                 allowCredentialsType, userVerification);
         try {
             JSONObject optionsJson = getCredentialOptions.toJSON();
-// Add      PRF extension if salt provided
+            // PRF extension if salt provided
             if (salt != null && !salt.isEmpty()) {
                 String saltBase64Url = hexToBase64Url(salt);
                 Log.i("Passkey", "salt provided auth" + saltBase64Url);
@@ -343,8 +339,6 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                                     JSONObject ext = json.optJSONObject("clientExtensionResults");
                                     Map<String, Object> extMap = null;
-
-                                    Log.i("Passkeys", "extension = " + ext);
 
                                     if (ext != null) {
                                         extMap = new HashMap<>();
