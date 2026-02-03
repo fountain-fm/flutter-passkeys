@@ -137,14 +137,16 @@ struct RegisterResponse {
   var attestationObject: String
   /// The supported transports for the authenticator
   var transports: [String?]
+  /// The clientExtensionResults - PRF results
+  var clientExtensionResults: [String?: Any?]? = nil
 
   static func fromList(_ list: [Any?]) -> RegisterResponse? {
-    let prf: String? = nilOrValue(list[0])
-    let id = list[1] as! String
-    let rawId = list[2] as! String
-    let clientDataJSON = list[3] as! String
-    let attestationObject = list[4] as! String
-    let transports = list[5] as! [String?]
+    let id = list[0] as! String
+    let rawId = list[1] as! String
+    let clientDataJSON = list[2] as! String
+    let attestationObject = list[3] as! String
+    let transports = list[4] as! [String?]
+    let clientExtensionResults: [String?: Any?]? = nilOrValue(list[5])
 
     return RegisterResponse(
       prf: prf,
@@ -152,7 +154,8 @@ struct RegisterResponse {
       rawId: rawId,
       clientDataJSON: clientDataJSON,
       attestationObject: attestationObject,
-      transports: transports
+      transports: transports,
+      clientExtensionResults: clientExtensionResults
     )
   }
   func toList() -> [Any?] {
@@ -163,6 +166,7 @@ struct RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      clientExtensionResults,
     ]
   }
 }
@@ -182,6 +186,8 @@ struct AuthenticateResponse {
   /// Signed challenge
   var signature: String
   var userHandle: String? = nil
+  /// The clientExtensionResults - PRF results
+  var clientExtensionResults: [String?: Any?]? = nil
 
   static func fromList(_ list: [Any?]) -> AuthenticateResponse? {
     let id = list[0] as! String
@@ -190,6 +196,7 @@ struct AuthenticateResponse {
     let authenticatorData = list[3] as! String
     let signature = list[4] as! String
     let userHandle: String? = nilOrValue(list[5])
+    let clientExtensionResults: [String?: Any?]? = nilOrValue(list[6])
 
     return AuthenticateResponse(
       id: id,
@@ -197,7 +204,8 @@ struct AuthenticateResponse {
       clientDataJSON: clientDataJSON,
       authenticatorData: authenticatorData,
       signature: signature,
-      userHandle: userHandle
+      userHandle: userHandle,
+      clientExtensionResults: clientExtensionResults
     )
   }
   func toList() -> [Any?] {
@@ -208,6 +216,7 @@ struct AuthenticateResponse {
       authenticatorData,
       signature,
       userHandle,
+      clientExtensionResults,
     ]
   }
 }
@@ -273,7 +282,7 @@ protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
@@ -344,7 +353,8 @@ class PasskeysApiSetup {
         let conditionalUIArg = args[2] as! Bool
         let allowedCredentialsArg = args[3] as! [CredentialType]
         let preferImmediatelyAvailableCredentialsArg = args[4] as! Bool
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg) { result in
+        let saltArg: String? = nilOrValue(args[5])
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, salt: saltArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))
