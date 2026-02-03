@@ -191,13 +191,10 @@ public class MessageHandler implements Messages.PasskeysApi {
                                         JSONObject results = prf.optJSONObject("results");
                                         if (results != null) {
                                             String first = results.optString("first", "");
-
                                             Map<String, Object> resultsMap = new HashMap<>();
                                             resultsMap.put("first", first);
-
                                             Map<String, Object> prfMap = new HashMap<>();
                                             prfMap.put("results", resultsMap);
-
                                             extMap.put("prf", prfMap);
                                         }
                                     }
@@ -348,13 +345,10 @@ public class MessageHandler implements Messages.PasskeysApi {
                                             JSONObject results = prf.optJSONObject("results");
                                             if (results != null) {
                                                 String first = results.optString("first", "");
-
                                                 Map<String, Object> resultsMap = new HashMap<>();
                                                 resultsMap.put("first", first);
-
                                                 Map<String, Object> prfMap = new HashMap<>();
                                                 prfMap.put("results", resultsMap);
-
                                                 extMap.put("prf", prfMap);
                                             }
                                         }
@@ -430,11 +424,9 @@ public class MessageHandler implements Messages.PasskeysApi {
     public static String hexToBase64Url(String hex) {
         int len = hex.length();
         byte[] bytes = new byte[len / 2];
-
         for (int i = 0; i < len; i += 2) {
             bytes[i / 2] = (byte) Integer.parseInt(hex.substring(i, i + 2), 16);
         }
-
         return Base64.encodeToString(
                 bytes,
                 Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP
