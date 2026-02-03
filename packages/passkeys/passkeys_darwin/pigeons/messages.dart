@@ -61,9 +61,6 @@ class RegisterResponse {
     this.clientExtensionResults = const {},
   });
 
-  /// The PRF
-  final String? prf;
-
   /// The ID
   final String id;
 
@@ -133,9 +130,9 @@ abstract class PasskeysApi {
     bool canBePlatformAuthenticator,
     bool canBeSecurityKey,
     String? residentKeyPreference,
-    String? attestationPreference, {
+    String? attestationPreference,
     String? salt,
-  });
+  );
 
   @async
   AuthenticateResponse authenticate(
@@ -143,9 +140,9 @@ abstract class PasskeysApi {
     String challenge,
     bool conditionalUI,
     List<CredentialType> allowedCredentials,
-    bool preferImmediatelyAvailableCredentials, {
+    bool preferImmediatelyAvailableCredentials,
     String? salt,
-  });
+  );
 
   @async
   void cancelCurrentAuthenticatorOperation();
