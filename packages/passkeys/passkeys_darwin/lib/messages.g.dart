@@ -104,6 +104,7 @@ class User {
 /// Represents a register response
 class RegisterResponse {
   RegisterResponse({
+    this.prf,
     required this.id,
     required this.rawId,
     required this.clientDataJSON,
@@ -111,6 +112,9 @@ class RegisterResponse {
     required this.transports,
     this.clientExtensionResults,
   });
+
+  /// The PRF
+  String? prf;
 
   /// The ID
   String id;
@@ -132,6 +136,7 @@ class RegisterResponse {
 
   Object encode() {
     return <Object?>[
+      prf,
       id,
       rawId,
       clientDataJSON,

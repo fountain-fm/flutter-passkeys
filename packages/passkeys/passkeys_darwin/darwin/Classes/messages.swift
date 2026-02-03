@@ -125,6 +125,8 @@ struct User {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct RegisterResponse {
+  /// The PRF
+  var prf: String? = nil
   /// The ID
   var id: String
   /// The raw ID
@@ -147,6 +149,7 @@ struct RegisterResponse {
     let clientExtensionResults: [String?: Any?]? = nilOrValue(list[5])
 
     return RegisterResponse(
+      prf: prf,
       id: id,
       rawId: rawId,
       clientDataJSON: clientDataJSON,
@@ -157,6 +160,7 @@ struct RegisterResponse {
   }
   func toList() -> [Any?] {
     return [
+      prf,
       id,
       rawId,
       clientDataJSON,

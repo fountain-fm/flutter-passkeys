@@ -61,6 +61,9 @@ class RegisterResponse {
     this.clientExtensionResults = const {},
   });
 
+  /// The PRF
+  final String? prf;
+
   /// The ID
   final String id;
 
