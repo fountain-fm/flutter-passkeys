@@ -45,7 +45,6 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
             }
             
             let response = RegisterResponse(
-                prf: prfString,
                 id: credentialRegistration.credentialID.toBase64URL(),
                 rawId: credentialRegistration.credentialID.toBase64URL(),
                 clientDataJSON: credentialRegistration.rawClientDataJSON.toBase64URL(),
