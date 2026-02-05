@@ -91,10 +91,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
 
             // PRF
             if #available(iOS 18.0, *) {
-            guard let saltB64Url = salt, let saltB64Url = Data.fromBase64Url(saltB64Url) else {
+                guard let salt = salt, let saltData = Data(hex: salt) else {
                 return
             }
-            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltB64Url)
+            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
                 platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFRegistrationInput.inputValues(values)
             }
             
@@ -185,8 +185,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         
         // PRF
         if #available(iOS 18.0, *) {
-        guard let saltB64Url = salt, let saltB64Url = Data.fromBase64Url(saltB64Url) else { return }
-        let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltB64Url)
+            guard let salt = salt, let saltData = Data(hex: salt) else { return }
+        let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
             platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFAssertionInput.inputValues(values)
         }
         
@@ -326,4 +326,24 @@ extension Data {
         result = result.replacingOccurrences(of: "=", with: "")
         return result
     }
+    
+    init?(hex: String) {
+        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard hex.count % 2 == 0 else { return nil }
+
+        var data = Data(capacity: hex.count / 2)
+        var index = hex.startIndex
+
+        while index < hex.endIndex {
+            let nextIndex = hex.index(index, offsetBy: 2)
+            let byteString = hex[index..<nextIndex]
+            guard let byte = UInt8(byteString, radix: 16) else { return nil }
+            data.append(byte)
+            index = nextIndex
+        }
+
+        self = data
+    }
 }
+
+
