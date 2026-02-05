@@ -303,6 +303,14 @@ public extension Data {
         return fromBase64(base64String)
     }
 
+    func toBase64URL() -> String {
+        var result = self.base64EncodedString()
+        result = result.replacingOccurrences(of: "+", with: "-")
+        result = result.replacingOccurrences(of: "/", with: "_")
+        result = result.replacingOccurrences(of: "=", with: "")
+        return result
+    }
+
     private static func base64UrlToBase64(base64Url: String) -> String {
         return base64Url.replacingOccurrences(of: "-", with: "+")
                          .replacingOccurrences(of: "_", with: "/")
