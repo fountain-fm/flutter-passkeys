@@ -309,6 +309,7 @@ public extension Data {
     }
     
     
+    /// init    - https://stackoverflow.com/questions/26501276/converting-hex-string-to-nsdata-in-swift
     init?(hex: String) {
         let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         guard hex.count % 2 == 0 else { return nil }
